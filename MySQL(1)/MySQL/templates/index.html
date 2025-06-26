@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">仪表盘</h2>
+
+<div class="row mb-4">
+    <!-- 统计卡片 -->
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-primary dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">图书总数</h5>
+                        <h1 class="card-text">{{ book_count }}</h1>
+                    </div>
+                    <i class="bi bi-book" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-success dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">购书者总数</h5>
+                        <h1 class="card-text">{{ buyer_count }}</h1>
+                    </div>
+                    <i class="bi bi-people" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-info dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">订单总数</h5>
+                        <h1 class="card-text">{{ order_count }}</h1>
+                    </div>
+                    <i class="bi bi-cart" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-warning dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">总收入</h5>
+                        <h1 class="card-text">¥{{ total_revenue|round(2) }}</h1>
+                    </div>
+                    <i class="bi bi-currency-yen" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- 最新订单 -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-light">
+                <h5 class="card-title mb-0">最新订单</h5>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    {% for order in recent_orders %}
+                    <li class="list-group-item recent-order">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>#{{ order.method_id }}</strong> - 
+                                <a href="{{ url_for('edit_buyer', purchase_id=order.purchase_id) }}">{{ order.name }}</a>
+                                <div class="text-muted small">购买: 
+                                    <a href="{{ url_for('edit_book', book_id=order.book_id) }}">{{ order.book_name }}</a>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-info">{{ order.payment_method }}</span>
+                                <span class="badge bg-secondary ms-1">{{ order.delivery_method }}</span>
+                                <div class="text-muted small mt-1">订单号: {{ order.method_id }}</div>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{{ url_for('orders') }}" class="btn btn-sm btn-outline-primary">查看所有订单</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 热门图书 -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-light">
+                <h5 class="card-title mb-0">热门图书</h5>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    {% for book in popular_books %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <a href="{{ url_for('edit_book', book_id=book.book_id) }}">{{ book.book_name }}</a>
+                            <div class="text-muted small">ID: {{ book.book_id }}</div>
+                        </div>
+                        <span class="badge bg-primary rounded-pill">{{ book.order_count }} 单</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{{ url_for('books') }}" class="btn btn-sm btn-outline-primary">查看所有图书</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

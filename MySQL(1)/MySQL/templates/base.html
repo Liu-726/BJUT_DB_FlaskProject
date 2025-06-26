@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>书店管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .stat-card {
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .recent-order:hover {
+            background-color: #f8f9fa;
+        }
+        .dashboard-card {
+            height: 100%;
+        }
+        .nav-link {
+            color: #495057;
+            font-weight: 500;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #0d6efd;
+            background-color: #e9ecef;
+        }
+        .card-title {
+            font-weight: 600;
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(13, 110, 253, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 侧边栏 -->
+            <div class="col-md-2 col-lg-2 d-md-block sidebar collapse bg-light p-3">
+                <div class="text-center mb-4">
+                    <h3 class="text-primary"><i class="bi bi-book"></i> 书店管理系统</h3>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2">
+                        <a class="nav-link {% if request.path == url_for('index') %}active{% endif %}" href="{{ url_for('index') }}">
+                            <i class="bi bi-speedometer2 me-2"></i> 仪表盘
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link {% if request.path == url_for('books') %}active{% endif %}" href="{{ url_for('books') }}">
+                            <i class="bi bi-book me-2"></i> 图书管理
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link {% if request.path == url_for('buyers') %}active{% endif %}" href="{{ url_for('buyers') }}">
+                            <i class="bi bi-people me-2"></i> 购书者管理
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link {% if request.path == url_for('orders') %}active{% endif %}" href="{{ url_for('orders') }}">
+                            <i class="bi bi-cart me-2"></i> 订单管理
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link {% if request.path == url_for('reports') %}active{% endif %}" href="{{ url_for('reports') }}">
+                            <i class="bi bi-bar-chart me-2"></i> 统计报表
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 主内容区 -->
+            <div class="col-md-10 ms-sm-auto p-4">
+                <!-- 消息通知 -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- 内容块 -->
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

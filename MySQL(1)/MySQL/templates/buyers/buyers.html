@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">购书者管理</h2>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">购书者列表</h5>
+        <div>
+            <a href="{{ url_for('add_buyer') }}" class="btn btn-sm btn-primary">
+                <i class="bi bi-plus-circle me-1"></i> 添加购书者
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <form method="get" class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="搜索姓名或联系方式" 
+                           value="{{ search_term }}">
+                    <button type="submit" class="btn btn-primary">搜索</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>年龄</th>
+                        <th>联系方式</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for buyer in buyers %}
+                    <tr>
+                        <td>{{ buyer.purchase_id }}</td>
+                        <td>{{ buyer.name }}</td>
+                        <td>{{ buyer.gender }}</td>
+                        <td>{{ buyer.age if buyer.age else '未知' }}</td>
+                        <td>{{ buyer.contact }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_buyer', purchase_id=buyer.purchase_id) }}" 
+                               class="btn btn-sm btn-outline-primary me-1">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <form action="{{ url_for('delete_buyer', purchase_id=buyer.purchase_id) }}" 
+                                  method="post" class="d-inline" 
+                                  onsubmit="return confirm('确定要删除这个购书者吗？');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">没有找到购书者</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

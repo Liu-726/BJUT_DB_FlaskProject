@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">图书管理</h2>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">图书列表</h5>
+        <div>
+            <a href="{{ url_for('add_book') }}" class="btn btn-sm btn-primary">
+                <i class="bi bi-plus-circle me-1"></i> 添加图书
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-8">
+                <form method="get" class="row g-2">
+                    <div class="col-md-5">
+                        <input type="text" name="search" class="form-control" placeholder="搜索书名或简介" 
+                               value="{{ search_term }}">
+                    </div>
+                    <div class="col-md-5">
+                        <select name="category" class="form-select">
+                            <option value="all" {% if current_category == "all" %}selected{% endif %}>所有分类</option>
+                            {% for category in categories %}
+                            <option value="{{ category }}" {% if current_category == category %}selected{% endif %}>
+                                {{ category }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">搜索</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>图书名称</th>
+                        <th>分类</th>
+                        <th>价格</th>
+                        <th>简介</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                    <tr>
+                        <td>{{ book.book_id }}</td>
+                        <td>{{ book.book_name }}</td>
+                        <td>{{ book.book_category }}</td>
+                        <td>¥{{ book.price }}</td>
+                        <td class="text-truncate" style="max-width: 200px;">
+                            {{ book.introduction }}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('edit_book', book_id=book.book_id) }}" 
+                               class="btn btn-sm btn-outline-primary me-1">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <form action="{{ url_for('delete_book', book_id=book.book_id) }}" method="post" 
+                                  class="d-inline" onsubmit="return confirm('确定要删除这本图书吗？');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">没有找到图书</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

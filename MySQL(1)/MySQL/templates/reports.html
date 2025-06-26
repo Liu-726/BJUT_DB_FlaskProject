@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">销售统计报表</h2>
+
+<div class="row">
+    <!-- 图书类别销售统计 -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">图书类别销售统计</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>类别</th>
+                                <th>销量</th>
+                                <th>销售额</th>
+                                <th>占比</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stat in category_stats %}
+                            <tr>
+                                <td>{{ stat.book_category }}</td>
+                                <td>{{ stat.sales_count }}</td>
+                                <td>¥{{ stat.total_revenue|round(2) }}</td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                        {% set percentage = (stat.total_revenue / revenue_sum*100 )|round(1) %}
+                                        <div class="progress-bar bg-info" role="progressbar" 
+                                             style="width: {{ percentage }}%;" 
+                                             aria-valuenow="{{ percentage }}" 
+                                             aria-valuemin="0" aria-valuemax="100">
+                                            {{ percentage }}%
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 付款方式统计 -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">付款方式分布</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>付款方式</th>
+                                <th>订单数</th>
+                                <th>占比</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stat in payment_stats %}
+                            <tr>
+                                <td>{{ stat.payment_method }}</td>
+                                <td>{{ stat.order_count }}</td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar bg-success" role="progressbar" 
+                                             style="width: {{ stat.percentage }}%;" 
+                                             aria-valuenow="{{ stat.percentage }}" 
+                                             aria-valuemin="0" aria-valuemax="100">
+                                            {{ stat.percentage }}%
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- 配送方式统计 -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">配送方式分布</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>配送方式</th>
+                                <th>订单数</th>
+                                <th>占比</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stat in delivery_stats %}
+                            <tr>
+                                <td>{{ stat.delivery_method }}</td>
+                                <td>{{ stat.order_count }}</td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar bg-warning" role="progressbar" 
+                                             style="width: {{ stat.percentage }}%;" 
+                                             aria-valuenow="{{ stat.percentage }}" 
+                                             aria-valuemin="0" aria-valuemax="100">
+                                            {{ stat.percentage }}%
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 购书者消费排行 -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">购书者消费排行</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>排名</th>
+                                <th>购书者</th>
+                                <th>订单数</th>
+                                <th>总消费</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stat in buyer_stats %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ stat.name }}</td>
+                                <td>{{ stat.order_count }}</td>
+                                <td>¥{{ stat.total_spent|round(2) }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center">没有数据</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">添加图书</h2>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">图书信息</h5>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <div class="mb-3">
+                <label for="book_name" class="form-label">图书名称</label>
+                <input type="text" class="form-control" id="book_name" name="book_name" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="book_category" class="form-label">图书分类</label>
+                <input type="text" class="form-control" id="book_category" name="book_category" 
+                       list="categoryList" required>
+                <datalist id="categoryList">
+                    {% for category in categories %}
+                    <option value="{{ category }}">
+                    {% endfor %}
+                </datalist>
+            </div>
+            
+            <div class="mb-3">
+                <label for="price" class="form-label">价格</label>
+                <div class="input-group">
+                    <span class="input-group-text">¥</span>
+                    <input type="number" class="form-control" id="price" name="price" 
+                           step="0.01" min="0" required>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="introduction" class="form-label">简介</label>
+                <textarea class="form-control" id="introduction" name="introduction" 
+                          rows="4" required></textarea>
+            </div>
+            
+            <div class="d-flex justify-content-end">
+                <a href="{{ url_for('books') }}" class="btn btn-secondary me-2">取消</a>
+                <button type="submit" class="btn btn-primary">添加图书</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
